@@ -130,11 +130,13 @@ function newArticle() {
                 $results['categories'] = $data['results'];
                 $inf = Subcategory::getList();
                 $results['subcategories'] = $inf['results'];
+                $data = User::getList();
+                $results['authors'] = $data['results'];
                 require(TEMPLATE_PATH . "/admin/editArticle.php");
             }
         } else {
             // Сохраняем новую статью
-            $article = new Article();
+            $article = new Article($_POST);
             $article->storeFormValues($_POST);
             $article->insert();
             header("Location: admin.php?status=changesSaved");
@@ -149,6 +151,8 @@ function newArticle() {
         $results['article'] = new Article;
         $$data = Category::getList();
         $results['categories'] = $data['results'];
+        $data = User::getList();
+        $results['authors'] = $data['results'];
         $inf = Subcategory::getList();
         $results['subcategories'] = $inf['results'];   
         require(TEMPLATE_PATH . "/admin/editArticle.php");
@@ -198,6 +202,8 @@ function editArticle() {
         $results['article'] = Article::getById((int)$_GET['articleId']);
         $data = Category::getList();
         $results['categories'] = $data['results'];
+        $data = User::getList();
+        $results['authors'] = $data['results'];
         $inf = Subcategory::getList();
         $results['subcategories'] = $inf['results']; 
         require(TEMPLATE_PATH . "/admin/editArticle.php");
@@ -235,6 +241,11 @@ function listArticles() {
     $results['subcategories'] = array();
     foreach ($inf['results'] as $subcategory)
                      $results['subcategories'][$subcategory->id] = $subcategory;
+    $data = User::getList();
+    $results['users'] = array();
+    foreach($data['results'] as $user) {
+        $results['users'][$user->id] = $user;
+    }
     
     $results['pageTitle'] = "Все статьи";
 

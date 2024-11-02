@@ -2,6 +2,8 @@
 
     class User
     {
+        public $id = null;
+        
         public $login = null;
         
         public $password = null;
@@ -9,6 +11,9 @@
         public $active = null;
         
         public function __construct($data = []) {
+            if (isset($data['id'])){
+                $this->id = $data['id'];
+            }
             if (isset($data['login'])){
                 $this->login = $data['login'];
             }
@@ -39,6 +44,20 @@
                 "totalRows" => $totalRows[0]
             )
             );
+        }
+        public static function getById($id){
+            $conn = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD);
+            $sql = "SELECT * FROM users_article WHERE id = :id ";
+            $st = $conn->prepare($sql);
+            $st->bindValue(":id",$id,PDO::PARAM_INT);
+            $st->execute();
+            
+            $row = $st->fetch();
+            $conn = null;
+            
+            if ($row){
+                return new User($row);
+            }
         }
         public static function getByLogin($login){
             $conn = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD);
@@ -85,6 +104,9 @@
             $conn = new PDO(DB_DSN, DB_USERNAME, DB_PASSWORD);
             $st = $conn->prepare("DELETE FROM users WHERE login = :login LIMIT 1");
             $st->bindValue(":login",$this->login,PDO::PARAM_STR);
+            $st->execute();
+            $st = $conn -> prepare("DELETE FROM users_aritcles WHERE user = :id");
+            $st->bindValue(":id", $this->$id,PDO::PARAM_INT);
             $st->execute();
             $conn = null;
         }

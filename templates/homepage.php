@@ -36,8 +36,25 @@
                         <?php echo "Без подкатегории"?>
                     </span>
                 <?php } ?>
+                 <?php if (isset($article->authors)) { ?>
+                <span class="category">
+                    Авторы: 
+                    <?php 
+                    $total = count($article->authors);
+                    $counter = 0;
+                    foreach($article->authors as $key =>$author){ ?>
+                        <a href=".?action=viewArticleAuthor&amp;author=<?php
+                                                                echo $author?>">
+                            <?php echo $author;
+                            $counter++;
+                            if($counter != $total){
+                                echo ', ';
+                            }
+                    }?>
+                    </a><?php } ?>
+                </span>
             </h2>
-
+            
             <p class="summary"><?php echo htmlspecialchars($article->content50char)?></p>
             <img id="loader-identity" src="JS/ajax-loader.gif" alt="gif">
 

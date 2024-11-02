@@ -18,6 +18,7 @@
               <th>Article</th>
               <th>Category</th>
               <th>Subcategory</th>
+              <th>Authors</th>
                <th>Active</th>
             </tr>
 
@@ -48,6 +49,23 @@
                   <?php
                   if (isset ($article->subcategoryId)){
                       echo $results['subcategories'][$article->subcategoryId]->name;
+                  }
+                  ?>
+              </td>
+              <td>
+                  <?php
+                  $total = count($article->authors);
+                    $counter = 0;
+                    foreach ($article->authors as $key => $author) {
+                ?>
+                        <a href=".?action=viewArticleAuthor&amp;author=<?php 
+                                                               echo $author ?>">
+                        <?php
+                            echo $author;
+                            $counter++;
+                            if ($counter != $total) {
+                                echo ', ';
+                            }
                   }
                   ?>
               </td>

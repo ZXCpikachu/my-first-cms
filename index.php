@@ -23,6 +23,9 @@ function initApplication()
         case 'viewArticleSubcategory';
           viewArticleSubcategory();
           break;
+        case 'viewArticleAuthor';
+          viewArticleAuthor();
+          break;
         case 'viewArticle':
           viewArticle();
           break;
@@ -72,6 +75,17 @@ function viewArticleSubcategory() {
     $results['pageTitle'] = $results['pageHeading'] . " | Widget News";
     require(TEMPLATE_PATH . "/viewArticleSubcategory.php");
 }
+function viewArticleAuthor(){
+    $results = [];
+    $results['author'] = User::getByLogin($_GET['author']);
+    $data = Article::getList(1000000, null, 1, null, $results['author']->id);
+    $results['articles'] = $data['results'];
+    $results['totalRows'] = $data['totalRows'];
+    
+    $results['pageHeading'] = 'Author\'s Articles';
+    $results['pageTitle'] = 'Author\'s Articles';
+    require(TEMPLATE_PATH . "/viewArticleAuthor.php");
+}
 /**
  * Загрузка страницы с конкретной статьёй
  * 
@@ -117,6 +131,11 @@ function homepage()
     $results['subcategories'] = array();
     foreach ($data['results'] as $subcategory) {
         $results['subcategories'][$subcategory->id] = $subcategory;
+    }
+    $data = User::getList();
+    $results['authors'] = array();
+    foreach($data['results'] as $author){
+        $results['authors'][$author->id] = $author;
     }
     $results['pageTitle'] = "Простая CMS на PHP";
     

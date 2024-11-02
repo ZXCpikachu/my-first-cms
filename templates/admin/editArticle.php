@@ -21,6 +21,7 @@ if($_POST){
     } else {
         $activeArticle = 0;
     }
+    $authors = $_POST['authors'];
 } else {
     $articleId = $results['article']->id;
     $title = $results['article']->title;
@@ -30,7 +31,8 @@ if($_POST){
     $subcategoryId = $results['article']->subcategoryId;
     $publicationDate = $results['article']->publicationDate;
     $activeArticle = $results['article']->activeArticle;
-}
+    $authors = $results['article']->authors;
+} var_dump($results['article']->authors);
 ?>
 
 <h1><?php echo $results['pageTitle']?></h1>
@@ -78,7 +80,17 @@ if($_POST){
                 <?php } ?>
             </select>
         </li>
-
+        <li>
+            <label for="authors[]">Authors</label>
+            <select name="authors[]">
+                <?php foreach ($results['authors'] as $author) { ?>
+                    <option value="<?php echo $author->id ?>"<?php
+                        echo in_array($author->id, $authors) ? " selected" : "" ?>>
+                        <?php echo htmlspecialchars($author->login) ?>
+                    </option>
+                <?php } ?>
+            </select>
+        </li>    
         <li>
             <label for="publicationDate">Publication Date</label>
             <input type="date" name="publicationDate" id="publicationDate" placeholder="YYYY-MM-DD" required maxlength="10" value="<?php echo $publicationDate ? date( "Y-m-d", $publicationDate ) : "" ?>" />
