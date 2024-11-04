@@ -11,7 +11,7 @@
                  <span class="pubDate">
                      <?php echo date('j F Y', $article->publicationDate)?>
                  </span>
-                 <a href=".action=viewActicles&amp;articleId = <?php 
+                 <a href=".?action=viewActicle&amp;articleId = <?php 
                                                             echo $article->id?>">
                      <?php echo htmlspecialchars($article->title)?>
                  </a>

@@ -187,7 +187,12 @@ function editArticle() {
             header( "Location: admin.php?error=articleNotFound" );
             return;
         }
-
+        $data = User::getList();
+        $results['authors'] = $data['results'];
+        $data = Category::getList();
+        $results['categories'] = $data['results'];
+        $inf = Subcategory::getList();
+        $results['subcategories'] = $inf['results'];  
         $article->storeFormValues( $_POST );
         $article->update();
         header( "Location: admin.php?status=changesSaved" );

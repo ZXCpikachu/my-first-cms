@@ -101,7 +101,7 @@ class Article
     public function storeFormValues ( $params ) {
 
       // Сохраняем все параметры
-      $this->__construct( $params,  $params['authors']);
+      $this->__construct( $params);
 
       // Разбираем и сохраняем дату публикации
       if ( isset($params['publicationDate']) ) {
@@ -110,6 +110,11 @@ class Article
         if ( count($publicationDate) == 3 ) {
           list ( $y, $m, $d ) = $publicationDate;
           $this->publicationDate = mktime ( 0, 0, 0, $m, $d, $y );
+        }
+        if (isset($params['authors']) && is_array($params['authors'])){
+            $this->authors = $params['authors'];
+        }else {
+            $this->authors= array();
         }
       }
     }
@@ -227,6 +232,7 @@ class Article
             "totalRows" => $totalRows[0]
             ) 
         );
+        
     }
 
 
@@ -296,20 +302,17 @@ class Article
       $st->bindValue(":id", $this->id, PDO::PARAM_INT);
       $st->bindValue(":active", $this->activeArticle, PDO::PARAM_INT);
       $st->execute();
-// вставляем новые строки в связующую таблицу      
       $sql = "DELETE FROM users_article WHERE articles = :id";
       $st = $conn->prepare($sql);
       $st->bindValue(":id", $this->id, PDO::PARAM_INT);
       $st->execute();
-        
-      foreach($this->authors as $user){
-        $sql = "INSERT INTO users_article (user, articles) 
-                VALUES (:user, :id)";
+      foreach ($this->authors as $author) {
+        $sql = "INSERT INTO users_article (user, articles) VALUES (:user, :id)";
         $st = $conn->prepare($sql);
-        $st->bindValue(":user", $user, PDO::PARAM_INT);
-        $st->bindValue(":id", $this->id, PDO::PARAM_INT);    
+        $st->bindValue(":user", $author, PDO::PARAM_INT);
+        $st->bindValue(":id", $this->id, PDO::PARAM_INT);
         $st->execute();
-      }
+    }
       $conn = null;
     }
 
@@ -327,7 +330,7 @@ class Article
       $st = $conn->prepare ( "DELETE FROM articles WHERE id = :id LIMIT 1" );
       $st->bindValue( ":id", $this->id, PDO::PARAM_INT );
       $st->execute();
-      $st = $conn->prepare("DELETE FROM users_aritcle WHERE article = :id");
+      $st = $conn->prepare("DELETE FROM users_article WHERE article = :id");
       $st->bindValue(":id", $this->id, PDO::PARAM_INT);
       $st->execute();
       $conn = null;
