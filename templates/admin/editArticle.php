@@ -83,6 +83,7 @@ if($_POST){
         <li>
             <label for="authors[]">Authors</label>
             <select name="authors[]">
+                <option value="">Без автора</option>
                 <?php foreach ($results['authors'] as $author) { ?>
                     <option value="<?php echo $author->id ?>"<?php
                         echo in_array($author->id, $authors) ? " selected" : "" ?>>

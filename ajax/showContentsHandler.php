@@ -8,7 +8,7 @@ if (isset($_GET['articleId'])) {
 if (isset ($_POST['articleId'])) {
     //die("Привет)");
     $article = Article::getById((int)$_POST['articleId']);
-    echo json_encode($article);
+    echo json_encode($article->content);
 //        die("Привет)");
 //    $conn = new PDO( DB_DSN, DB_USERNAME, DB_PASSWORD );
 //    

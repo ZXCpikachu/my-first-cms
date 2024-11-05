@@ -1,6 +1,11 @@
 <?php include "templates/include/header.php" ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="/ajax/loadArticle.js"></script>
 <ul id="headlines">
-    <?php foreach ($results['articles'] as $article) { ?>
+    <?php 
+    $id = array();
+    $content = array();
+    foreach ($results['articles'] as $article){ ?>
         <li class='<?php echo $article->id?>'>
             <h2>
                 <span class="pubDate">
@@ -57,12 +62,11 @@
             
             <p class="summary"><?php echo htmlspecialchars($article->content50char)?></p>
             <img id="loader-identity" src="JS/ajax-loader.gif" alt="gif">
-
             <ul class="ajax-load">
                 <li><a href=".?action=viewArticle&amp;articleId=<?php echo $article->id?>" class="ajaxArticleBodyByPost" data-contentId="<?php echo $article->id?>">Показать продолжение (POST)</a></li>
                 <li><a href=".?action=viewArticle&amp;articleId=<?php echo $article->id?>" class="ajaxArticleBodyByGet" data-contentId="<?php echo $article->id?>">Показать продолжение (GET)</a></li>
-                <li><a href=".?action=viewArticle&amp;articleId=<?php echo $article->id?>" class="">(POST) -- NEW</a></li>
-                <li><a href=".?action=viewArticle&amp;articleId=<?php echo $article->id?>" class="">(GET)  -- NEW</a></li>
+                <li><a href=".?action=viewArticle&amp;articleId=<?php echo $article->id?>" class="loadArticle" style="cursor:pointer" data-contentId="<?=$article->id?>">(POST) -- NEW</a></li>
+                <li><a href=".?action=viewArticle&amp;articleId=<?php echo $article->id?>" class="loadArticle" style="cursor:pointer" data-contentId="<?=$article->id?>">(GET)  -- NEW</a></li>
             </ul>
 
             <a href=".?action=viewArticle&amp;articleId=<?php echo $article->id?>" class="showContent" data-contentId="<?php echo $article->id?>">Показать полностью</a>
@@ -71,3 +75,4 @@
 </ul>
 <p><a href="./?action=archive">Article Archive</a></p>
 <?php include "templates/include/footer.php" ?>
+
